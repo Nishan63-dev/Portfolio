@@ -84,3 +84,5 @@ This Laravel project implements a school finance reporting system with the follo
 ## SQL Dump
 
 The included SQL file `database/leadnexa.sql` contains the table schema and a seeded admin user.
+
+
