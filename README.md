@@ -1,88 +1,213 @@
 # LeadNexa School Finance Module
 
-This Laravel project implements a school finance reporting system with the following core features:
+A Laravel-based school finance management system for tracking income, expenses, payroll, and generating printable PDF reports.
 
-- School admin authentication
-- Income CRUD with fee receipt PDF generation
-- Expense CRUD
-- Payroll CRUD with automatic net salary calculation
-- Dashboard totals for income, expenses, payroll, and net profit
-- Date-range financial report filtering
+## Project Overview
+
+This application includes:
+
+- Admin authentication and protected finance workflows
+- Income management with fee receipt generation as PDF
+- Expense management for school operating costs
+- Payroll management with automatic net salary calculation
+- Dashboard with income, expense, payroll, and net profit totals
+- Date-range filtered financial report page
 - Downloadable financial summary PDF
-- API endpoints for dashboard, income, expense, payroll, and reports
+- REST-style API endpoints backing the UI
 
-## Setup
+## Requirements
 
-1. Copy `.env.example` to `.env` and set your MySQL credentials.
-2. Run `composer install`.
-3. Run `php artisan key:generate`.
-4. Run `php artisan migrate`.
-5. Run `php artisan db:seed` to create the default school admin account.
-6. Run `npm install`.
-7. Run `npm run build`.
-8. Start the app with `php artisan serve`.
+- PHP 8.2+
+- Composer
+- MySQL or compatible database
+- Node.js 18+ and npm
+- Git
 
-## Default Admin User
+## Installation
+
+1. Clone the repository:
+
+```powershell
+git clone https://github.com/<your-username>/<repo-name>.git
+cd <repo-name>
+```
+
+2. Copy environment configuration:
+
+```powershell
+copy .env.example .env
+```
+
+3. Install PHP dependencies:
+
+```powershell
+composer install
+```
+
+4. Generate the application key:
+
+```powershell
+php artisan key:generate
+```
+
+5. Configure your database in `.env`:
+
+```ini
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=your_database
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+```
+
+6. Run migrations and seed the default admin user:
+
+```powershell
+php artisan migrate
+php artisan db:seed
+```
+
+7. Install frontend dependencies:
+
+```powershell
+npm install
+```
+
+8. Build assets:
+
+```powershell
+npm run build
+```
+
+9. Start the application:
+
+```powershell
+php artisan serve
+```
+
+Then visit `http://127.0.0.1:8000`.
+
+## Default Admin Credentials
 
 - Email: `admin@leadnexa.test`
 - Password: `password`
 
-## Files Included
-
-- `database/leadnexa.sql` — SQL schema and seeded admin account.
-- `postman/leadnexa-school-finance.postman_collection.json` — Postman collection for API testing.
-
-## Key Routes
+## Main Features
 
 ### Authentication
-- `GET /login`
-- `POST /login`
-- `POST /logout`
+- School admin login and logout
+- Protected finance pages for authorized users only
 
-### Web pages
-- `GET /dashboard`
-- `GET /incomes`
-- `GET /incomes/create`
-- `GET /incomes/{income}`
-- `GET /incomes/{income}/edit`
-- `GET /expenses`
-- `GET /expenses/create`
-- `GET /expenses/{expense}`
-- `GET /expenses/{expense}/edit`
-- `GET /payrolls`
-- `GET /payrolls/create`
-- `GET /payrolls/{payroll}`
-- `GET /payrolls/{payroll}/edit`
-- `GET /reports`
-- `GET /pdf/receipt/{income}`
-- `GET /pdf/summary`
+### Income
+- Create, edit, list, and view income entries
+- Receipt PDF generation for each income record
+- Date-normalized payment dates for consistent storage
 
-### API endpoints
-- `GET /api/dashboard`
-- `GET /api/reports/summary`
-- `GET /api/incomes`
-- `POST /api/incomes`
-- `PUT /api/incomes/{income}`
-- `GET /api/expenses`
-- `POST /api/expenses`
-- `PUT /api/expenses/{expense}`
-- `GET /api/payrolls`
-- `POST /api/payrolls`
-- `PUT /api/payrolls/{payroll}`
+### Expense
+- Create, edit, and list expense records
+- Expense date normalization and validation
 
-## Notes
+### Payroll
+- Create, edit, and list payroll entries
+- Automatic `net_salary = salary + bonus - deduction`
+- Payroll date normalization and validation
 
-- Admin-only access is enforced using `is_admin` on the `users` table.
-- PDF generation is handled by `barryvdh/laravel-dompdf`.
-- Report filters are powered by the `/api/reports/summary` endpoint and update dynamically on the Reports page.
+### Reports
+- Filter financial data by start and end date
+- Live summary totals for income, expenses, payroll, and net profit
+- Download summary as PDF
 
-## Testing
+### Dashboard
+- Live dashboard totals powered by `/api/dashboard`
+- Income, expenses, payroll, and net profit displayed in the UI
 
-- Use the provided Postman collection at `postman/leadnexa-school-finance.postman_collection.json`.
-- Start with `Open Login Page` and then `Login Admin` to establish session cookies.
+## Routes
 
-## SQL Dump
+### Web Routes
 
-The included SQL file `database/leadnexa.sql` contains the table schema and a seeded admin user.
+| URL | Purpose |
+|---|---|
+| `/login` | Login page |
+| `/logout` | Logout action |
+| `/dashboard` | Finance dashboard |
+| `/incomes` | Income list |
+| `/incomes/create` | Add income |
+| `/incomes/{income}` | View income |
+| `/incomes/{income}/edit` | Edit income |
+| `/expenses` | Expense list |
+| `/expenses/create` | Add expense |
+| `/expenses/{expense}` | View expense |
+| `/expenses/{expense}/edit` | Edit expense |
+| `/payrolls` | Payroll list |
+| `/payrolls/create` | Add payroll |
+| `/payrolls/{payroll}` | View payroll |
+| `/payrolls/{payroll}/edit` | Edit payroll |
+| `/reports` | Financial reports page |
+| `/pdf/receipt/{income}` | Download income receipt PDF |
+| `/pdf/summary` | Download financial summary PDF |
+
+### API Routes
+
+| Method | URL | Purpose |
+|---|---|---|
+| `GET` | `/api/dashboard` | Dashboard totals |
+| `GET` | `/api/reports/summary` | Filtered report data |
+| `GET` | `/api/incomes` | Income list for API |
+| `POST` | `/api/incomes` | Create income |
+| `PUT` | `/api/incomes/{income}` | Update income |
+| `GET` | `/api/expenses` | Expense list for API |
+| `POST` | `/api/expenses` | Create expense |
+| `PUT` | `/api/expenses/{expense}` | Update expense |
+| `GET` | `/api/payrolls` | Payroll list for API |
+| `POST` | `/api/payrolls` | Create payroll |
+| `PUT` | `/api/payrolls/{payroll}` | Update payroll |
+
+## Technology Stack
+
+- Laravel 12
+- Blade templates
+- Axios for AJAX requests
+- Vite for frontend bundling
+- DomPDF for PDF generation
+- MySQL for persistence
+- Laravel authentication and middleware
+
+## Important Notes
+
+- The app uses `barryvdh/laravel-dompdf` for PDF receipts and summary exports.
+- Date inputs are normalized to `YYYY-MM-DD` before validation.
+- Currency values are displayed with the rupee symbol and formatted with two decimals.
+
+## Contributing
+
+1. Create a branch:
+
+```powershell
+git checkout -b feature/your-feature-name
+```
+
+2. Commit your changes:
+
+```powershell
+git add .
+git commit -m "Add feature or fix"
+```
+
+3. Push the branch:
+
+```powershell
+git push -u origin feature/your-feature-name
+```
+
+## Troubleshooting
+
+- If assets do not load, run `npm run build` again.
+- If you see PDF encoding issues, make sure the view uses `DejaVu Sans` and rupee symbol entities `&#8377;`.
+- If login fails, verify the seeded admin credentials and database connection.
+
+## License
+
+This repository is provided as-is for the school finance module demonstration.
 
 
