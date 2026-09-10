@@ -25,6 +25,9 @@
             <a href="#about">About</a>
             <a href="#skills">Skills</a>
             <a href="#contact">Say Hello</a>
+            <a href="{{ asset('resume.pdf') }}" target="_blank" rel="noopener" class="nav-resume-btn">
+                <i class="fa-solid fa-file-arrow-down"></i> Resume
+            </a>
         </div>
         <button class="nav-burger" id="navBurger" aria-label="Toggle navigation" aria-expanded="false">
             <span></span>
@@ -47,6 +50,9 @@
                 <p class="hero-bio">{{ $heroTagline }}</p>
                 <div class="hero-cta">
                     <a href="#work" class="btn-solid"><i class="fa-solid fa-arrow-down"></i> See my work</a>
+                    <a href="{{ asset('resume.pdf') }}" target="_blank" rel="noopener" class="btn-outline">
+                        <i class="fa-solid fa-download"></i> Resume (PDF)
+                    </a>
                     <a href="mailto:{{ $email }}" class="btn-ghost">{{ $email }}</a>
                 </div>
                 <div class="hero-quick">
